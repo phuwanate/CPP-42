@@ -6,7 +6,7 @@
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:19:38 by plertsir          #+#    #+#             */
-/*   Updated: 2024/01/04 16:23:16 by plertsir         ###   ########.fr       */
+/*   Updated: 2024/01/04 19:33:45 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ int main(void)
         std::cout << a << '\n';
         std::cout << b << '\n';
         std::cout << c << '\n';
-    } catch (Bureaucrat::GradeTooHighException &e) {
-        std::cerr << RED << e.what() << DEFAULT <<'\n';
-    } catch (Bureaucrat::GradeTooLowException &e) {
+    }catch (std::exception &e){
         std::cerr << RED << e.what() << DEFAULT << '\n';
     }
     std::cout << std::setfill('-') << std::setw(73) << '\n';
@@ -46,9 +44,7 @@ int main(void)
         
         c.decrement();
         std::cout << c << '\n';
-    } catch (Bureaucrat::GradeTooHighException &e) {
-        std::cerr << RED << e.what() << DEFAULT <<'\n';
-    } catch (Bureaucrat::GradeTooLowException &e) {
+    }catch (std::exception &e){
         std::cerr << RED << e.what() << DEFAULT << '\n';
     }
     std::cout << std::setfill('-') << std::setw(73) << '\n';
