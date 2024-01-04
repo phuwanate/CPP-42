@@ -6,7 +6,7 @@
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 18:58:41 by plertsir          #+#    #+#             */
-/*   Updated: 2023/12/31 11:41:46 by plertsir         ###   ########.fr       */
+/*   Updated: 2024/01/04 12:07:55 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ void ClapTrap::beRepaired(unsigned int amount){
         std::cout << RED << this->_Name << "\'s energy point is 0, It's impossible to repair...\"" << '\n';
     else if (this->_HitPoint == 10)
         std::cout << RED << "ClapTrap: " << this->_Name << " is healthy, It doesn't need to repair." << '\n';
+    else if (this->_HitPoint == 0)
+        std::cout << RED << this->_Name << "\'s hit point is 0, It's impossible to repair...\"" << '\n';
     else
     {
         std::cout << ORANGE << "Action: \"ClapTrap " << this->_Name << " repairing...\"" << '\n';
