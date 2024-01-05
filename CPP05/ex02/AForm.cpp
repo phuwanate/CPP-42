@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   AForm.cpp                                          :+:      :+:    :+:   */
+/*   Form.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -78,34 +78,29 @@ void	AForm::beSigned(Bureaucrat const &instance){
 
 const char *AForm::GradeTooHighException::what() const throw(){
 
-	return "Grade is too high";
+	return "grade is too high";
 }
 
 const char *AForm::GradeTooLowException::what() const throw(){
 
-	return "Grade is too low";
+	return "grade is too low";
 }
 
 const char *AForm::GradeTooHighExcecution::what() const throw(){
 
-	return "Grade is too high to execute.";
-}
-
-const char *AForm::GradeTooLowExcecution::what() const throw(){
-
-	return "Grade is too low to execute.";
+	return "grade is too high to execute.";
 }
 
 const char *AForm::NotbeSigned::what() const throw(){
 
-	return "the form not signed";
+	return "the AForm not signed";
 }
 
 std::ostream	&operator<<(std::ostream &o, AForm const &instance){
 
-	o << ORANGE << "AForm: " << '\n';
+	o << "AForm: " << '\n';
 	o << "Name            : " << instance.getName() << '\n';
-	o << "AForm status     : " << instance.getFormStatus() << '\n';
+	o << "Form status     : " << instance.getFormStatus() << '\n';
 	o << "Grade to Signed : " << instance.getSignedGrade() << '\n';
 	o << "Grade to Execute: " << instance.getExecuteGrade() << '\n' << DEFAULT;
 	return o;

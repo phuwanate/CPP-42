@@ -6,7 +6,7 @@
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:19:38 by plertsir          #+#    #+#             */
-/*   Updated: 2024/01/05 00:13:34 by plertsir         ###   ########.fr       */
+/*   Updated: 2024/01/05 12:40:55 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,13 @@ int main(void)
     ShrubberyCreationForm   form1("home");
     RobotomyRequestForm     form2("Robro");
     PresidentialPardonForm  form3("William");
-    Bureaucrat              Josh("Josh", 1);
+    Bureaucrat              Josh("Josh", 145);
+
 
     std::cout << std::setfill('-') << std::setw(73) << '\n';
     std::cout << "ShrubberyCreationForm" << '\n';
     std::cout << std::setfill('-') << std::setw(73) << '\n';
+    std::cout << ORANGE << form1 << '\n';
     Josh.signForm(form1);
     Josh.executeForm(form1);
     std::cout << std::setfill('-') << std::setw(73) << '\n';
@@ -33,6 +35,7 @@ int main(void)
     std::cout << std::setfill('-') << std::setw(73) << '\n';
     std::cout << "RobotomyRequestForm" << '\n';
     std::cout << std::setfill('-') << std::setw(73) << '\n';
+    std::cout << GREEN << form2 << '\n' << DEFAULT ;
     Josh.signForm(form2);
     for (int i = 0; i < 4; i++)
         Josh.executeForm(form2);
@@ -41,6 +44,7 @@ int main(void)
     std::cout << std::setfill('-') << std::setw(73) << '\n';
     std::cout << "PresidentialPardonForm" << '\n';
     std::cout << std::setfill('-') << std::setw(73) << '\n';
+    std::cout << CYAN << form3 << '\n' << DEFAULT ;
     Josh.signForm(form3);
     Josh.executeForm(form3);
     std::cout << std::setfill('-') << std::setw(73) << '\n';

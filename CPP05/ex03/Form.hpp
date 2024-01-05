@@ -1,5 +1,5 @@
-#ifndef AFORM_HPP
-# define AFORM_HPP
+#ifndef FORM_HPP
+# define FORM_HPP
 
 #define ORANGE "\033[38;2;255;165;0m"
 #define DEFAULT "\033[0m"
@@ -16,7 +16,7 @@
 
 class Bureaucrat;
 
-class AForm {
+class Form {
 
     private:
             std::string const   _name;
@@ -24,11 +24,11 @@ class AForm {
             int const           _signedGrade;
             int const           _executeGrade;
     public:
-					            AForm(void);
-								AForm(std::string const name, int const gradeSigned,int const gradeExecute);
-								AForm(AForm const &instance);
-								~AForm(void);
-			AForm				&operator=(AForm const &instance);
+					            Form(void);
+								Form(std::string const name, int const gradeSigned,int const gradeExecute);
+								Form(Form const &instance);
+			virtual				~Form(void);
+			Form				&operator=(Form const &instance);
 			//Getters for attributes
 			std::string			getName(void) const;
 			bool				getFormStatus(void) const;
@@ -61,7 +61,7 @@ class AForm {
 			};
 };
 
-std::ostream	&operator<<(std::ostream &o, AForm const &instance);
+std::ostream	&operator<<(std::ostream &o, Form const &instance);
 
 
 

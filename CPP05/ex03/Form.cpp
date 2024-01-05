@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Form.cpp                                           :+:      :+:    :+:   */
+/*   Form.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/04 18:00:17 by plertsir          #+#    #+#             */
-/*   Updated: 2024/01/05 12:29:15 by plertsir         ###   ########.fr       */
+/*   Created: 2024/01/04 21:08:30 by plertsir          #+#    #+#             */
+/*   Updated: 2024/01/05 00:02:28 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int     Form::getExecuteGrade(void) const{
 }
 
 void	Form::beSigned(Bureaucrat const &instance){
-
+	
 	if (instance.getGrade() > this->_signedGrade)
 		throw Form::GradeTooLowException();
 	this->_formStatus = true;
@@ -84,6 +84,16 @@ const char *Form::GradeTooHighException::what() const throw(){
 const char *Form::GradeTooLowException::what() const throw(){
 
 	return "Grade is too low";
+}
+
+const char *Form::GradeTooHighExcecution::what() const throw(){
+
+	return "grade is too high to execute.";
+}
+
+const char *Form::NotbeSigned::what() const throw(){
+
+	return "the form not signed";
 }
 
 std::ostream	&operator<<(std::ostream &o, Form const &instance){

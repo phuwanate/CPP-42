@@ -6,7 +6,7 @@
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 15:19:38 by plertsir          #+#    #+#             */
-/*   Updated: 2024/01/04 20:51:26 by plertsir         ###   ########.fr       */
+/*   Updated: 2024/01/05 12:28:31 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int main(void)
         // if everything is okay go next, if not go catch block.
         Bureaucrat  Josh("Josh", 1);
         Form        paper("Budget Disbursement", 4, 1);
-    
+
+        std::cout << paper << '\n';
         Josh.signForm(paper);
     } catch (std::exception &e){
         std::cerr << RED << e.what() << DEFAULT << '\n';
@@ -39,6 +40,7 @@ int main(void)
         Bureaucrat  Josh("Josh", 150);
         Form        paper("Budget Disbursement", 1, 1);
         
+        std::cout << paper << '\n';
         Josh.signForm(paper);
     } catch (std::exception &e){
         std::cerr << RED << e.what() << DEFAULT << '\n';
