@@ -6,7 +6,7 @@
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 12:02:06 by plertsir          #+#    #+#             */
-/*   Updated: 2024/01/08 15:43:37 by plertsir         ###   ########.fr       */
+/*   Updated: 2024/01/09 13:37:50 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,11 @@ void printFloat(float _f, std::string const &arg, arg_type _type, bool &_impossi
     else
     {
         _type = FLOAT;
-        if (isImpossible(arg, _type, _impossible) == true)
-            std::cout << RED << "float: impossible" << DEFAULT;
-        _f = std::stof( arg );
+        if (isImpossible(arg, _type, _impossible) == true){
+            std::cout << RED << "float: impossible" << '\n' << DEFAULT;
+	    return ;
+	}
+	_f = std::stof( arg );
         std::cout << "float: ";
         if (arg == "nan" || arg == "nanf")
             std::cout << "nanf";
@@ -96,9 +98,11 @@ void printDouble(double _d, std::string const &arg, arg_type _type, bool &_impos
         std::cout << "double: " << static_cast<double> (arg[0]) << ".0";
     else{
             _type = DOUBLE;
-            if (isImpossible(arg, _type, _impossible) == true)
-                std::cout << RED << "double: impossible" << DEFAULT;
-            _d = std::stod( arg );
+            if (isImpossible(arg, _type, _impossible) == true){
+                std::cout << RED << "double: impossible" << '\n' << DEFAULT;
+	    	return ;
+	    }
+	    _d = std::stod( arg );
             std::cout << "double: ";
             if (arg == "nan" || arg == "nanf")
                 std::cout << "nan";
@@ -180,7 +184,10 @@ bool isDouble(std::string const &arg){
 void showOutput(char _c, int const _n, float const _f, double const _d, std::string const &arg,\
  arg_type _type, bool &_impossible){
 
-    printChar(_c, arg);
+    if (_n > 255)
+        std::cout << RED << "char: Impossible" << '\n' << DEFAULT;
+    else
+        printChar(_c, arg);
     printInt(_n, arg, _type, _impossible);
     printFloat(_f, arg, _type, _impossible);
     printDouble(_d, arg, _type, _impossible);

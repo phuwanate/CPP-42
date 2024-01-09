@@ -6,7 +6,7 @@
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 16:17:20 by plertsir          #+#    #+#             */
-/*   Updated: 2024/01/08 22:37:55 by plertsir         ###   ########.fr       */
+/*   Updated: 2024/01/09 13:39:49 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ int main(void){
     identify(d);
     std::cout << "&d ";
     identify(*d);
+
+    delete a;
+    delete b;
+    delete c;
+    delete d;
 
     return EXIT_SUCCESS;
 }
