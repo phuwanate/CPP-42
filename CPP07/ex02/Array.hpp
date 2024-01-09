@@ -5,6 +5,7 @@
 #define RED     "\033[31m"
 
 #include <iostream>
+#include <string>
 #include <exception>
 
 #pragma once

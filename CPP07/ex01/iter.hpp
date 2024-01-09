@@ -2,6 +2,7 @@
 # define ITER_HPP
 
 #include <iostream>
+#include <string>
 #include <exception>
 
 #define DEFAULT "\033[0m"
