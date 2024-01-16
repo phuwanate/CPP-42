@@ -6,7 +6,7 @@
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 22:02:11 by plertsir          #+#    #+#             */
-/*   Updated: 2024/01/08 22:35:11 by plertsir         ###   ########.fr       */
+/*   Updated: 2024/01/10 19:12:47 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ Base *generate(void){
 }
 
 void identify(Base* p){
-    
+    //Base->?    
     //Null ptr will return if cast failed
     if (dynamic_cast< A *>( p ))
         std::cout << "-> \"A\"" << '\n';

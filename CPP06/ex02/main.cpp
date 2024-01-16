@@ -6,7 +6,7 @@
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 16:17:20 by plertsir          #+#    #+#             */
-/*   Updated: 2024/01/09 13:39:49 by plertsir         ###   ########.fr       */
+/*   Updated: 2024/01/10 19:09:46 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int main(void){
 
-    Base *a = generate();
+    Base *a = generate();//Base->?
     Base *b = generate();
     Base *c = generate();
     Base *d = generate();

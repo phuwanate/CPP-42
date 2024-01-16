@@ -6,7 +6,7 @@
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 22:45:02 by plertsir          #+#    #+#             */
-/*   Updated: 2024/01/09 23:40:19 by plertsir         ###   ########.fr       */
+/*   Updated: 2024/01/10 00:01:58 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int main(void){
     
     std::cout << "[ Mandatory Test ]" << '\n';
 
-    Array<int> arr_int(10);
     Array<int> empty;
+    Array<int> arr_int(10);
     Array<double> arr_double(10);
     Array<std::string> arr_str(3);
 

@@ -6,7 +6,7 @@
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 18:57:33 by plertsir          #+#    #+#             */
-/*   Updated: 2024/01/09 23:31:26 by plertsir         ###   ########.fr       */
+/*   Updated: 2024/01/10 00:01:26 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int main(void){
     int arr_int[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     std::string arr_str[] = {"cat", "dog", "zombie", "pizza", "sky"};
     
-    iter(arr_int, -1, &call_arr<int>);
+    // iter(arr_int, -1, &call_arr<int>);
     iter(arr_int, getSize(arr_int), &call_arr<int>);
     iter(arr_str, getSize(arr_str), &call_arr<std::string>);
 

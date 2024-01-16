@@ -6,7 +6,7 @@
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 12:02:06 by plertsir          #+#    #+#             */
-/*   Updated: 2024/01/09 13:37:50 by plertsir         ###   ########.fr       */
+/*   Updated: 2024/01/10 18:45:52 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,14 @@ void printChar(char _c, std::string const &arg){
 
 void printInt(int _n, std::string const &arg, arg_type _type, bool &_impossible){
     if (_type == CHAR)
-        std::cout << "int: " << static_cast<int> (arg[0]);
+        std::cout << "int: " << _n;
     else
     {
         _type = INT;
         if (isImpossible(arg, _type, _impossible) == true)
             std::cout << RED << "int: impossible" << DEFAULT;
         else
-        {   
-            _n = std::stoi( arg );
             std::cout << "int: " << _n;
-        }
     }
     std::cout << '\n';
 }
@@ -68,7 +65,7 @@ void printInt(int _n, std::string const &arg, arg_type _type, bool &_impossible)
 void printFloat(float _f, std::string const &arg, arg_type _type, bool &_impossible){
     
     if (_type == CHAR)
-        std::cout << "float: " << static_cast<float> (arg[0]) << ".0f";
+        std::cout << "float: " << _f << ".0f";
     else
     {
         _type = FLOAT;
@@ -76,7 +73,6 @@ void printFloat(float _f, std::string const &arg, arg_type _type, bool &_impossi
             std::cout << RED << "float: impossible" << '\n' << DEFAULT;
 	    return ;
 	}
-	_f = std::stof( arg );
         std::cout << "float: ";
         if (arg == "nan" || arg == "nanf")
             std::cout << "nanf";
@@ -87,7 +83,7 @@ void printFloat(float _f, std::string const &arg, arg_type _type, bool &_impossi
         else if (_f - static_cast<int>( _f ) == 0)
             std::cout << _f << ".0f";
         else
-            std::cout << _f;
+            std::cout << _f << 'f';
     }
     std::cout << '\n';
 }
@@ -95,14 +91,13 @@ void printFloat(float _f, std::string const &arg, arg_type _type, bool &_impossi
 void printDouble(double _d, std::string const &arg, arg_type _type, bool &_impossible){
     
     if (_type == CHAR)
-        std::cout << "double: " << static_cast<double> (arg[0]) << ".0";
+        std::cout << "double: " << _d << ".0";
     else{
             _type = DOUBLE;
             if (isImpossible(arg, _type, _impossible) == true){
                 std::cout << RED << "double: impossible" << '\n' << DEFAULT;
 	    	return ;
 	    }
-	    _d = std::stod( arg );
             std::cout << "double: ";
             if (arg == "nan" || arg == "nanf")
                 std::cout << "nan";
