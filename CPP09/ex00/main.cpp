@@ -5,9 +5,8 @@ int main(int ac, char **av){
     try{
         if (ac != 2)
             throw BitcoinExchange::InvalidArgument();
-        if (static_cast<std::string>(av[1]) != "input.txt")
-            throw BitcoinExchange::InvalidFile();
-        
+        // else if (static_cast<std::string>(av[1]) != "input.txt")
+        //     throw BitcoinExchange::InvalidFile();
         BitcoinExchange bitcoin_rate;
         bitcoin_rate.trade(av[1]);
 

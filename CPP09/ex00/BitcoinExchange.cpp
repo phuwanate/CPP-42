@@ -19,14 +19,6 @@ BitcoinExchange::BitcoinExchange(void){
         this->_exchangeData[date] = rate;
     }
     file.close();
-    // std::map<std::string, std::string>::iterator it = _exchangeData.begin();
-    // std::map<std::string, std::string>::iterator ite = _exchangeData.end();
-    // while (it != ite)
-    // {
-    //     std::cout << it->first << ", ";
-    //     std::cout << it->second << '\n';
-    //     it++;
-    // }
 }
 
 void    BitcoinExchange::trade(std::string const& file_txt){
@@ -36,6 +28,9 @@ void    BitcoinExchange::trade(std::string const& file_txt){
     std::size_t     found;
     std::string     date;
     std::string     value;
+    std::string     prevDate;
+    std::string     currDate;
+    std::map<std::string, std::string>::iterator    it;
 
     if (file.is_open() == false){
         //if file cannot open.
@@ -51,8 +46,7 @@ void    BitcoinExchange::trade(std::string const& file_txt){
     std::getline(file, line);
     if (line != "date | value"){
         //if header input.txt is invalid
-        std::cout << RED << "Error: Invalid format." << '\n' << DEFAULT;
-        exit (EXIT_FAILURE);
+        std::cout << RED << "Error: Invalid format. => " << line << '\n' << DEFAULT;
     }
     while (std::getline(file, line)){
         
@@ -71,15 +65,55 @@ void    BitcoinExchange::trade(std::string const& file_txt){
             if (value.empty() == true)
                 throw std::invalid_argument("Error: value is empty.");
             is_value_valid(value);
+            it = this->_exchangeData.find(date);
+            prevDate = date;
+            while(it == _exchangeData.end()){
+                currDate = prevDate;
+                prevDate = goback_date(currDate);
+                it = this->_exchangeData.find(prevDate);
+            }
 
-            
-
-            std::cout << date << " => " << value << " = " << '\n';
+            std::cout << date << " => " << value << " = ";
+            // std::cout << ft_stof(value) * ft_stof(it->second)<< '\n';
+            std::cout << std::stof(value) * std::stof(it->second)<< '\n';
         }catch (std::exception &e){
             std::cout << RED << e.what() << " => " << line << '\n' << DEFAULT;
         }
     }
     file.close();
+}
+
+std::string BitcoinExchange::goback_date(const std::string& date){
+
+    int  Year = std::stoi(date.substr(0, 4));
+    int  Month = std::stoi(date.substr(5, 2));
+    int  Day = std::stoi(date.substr(8, 2));
+    int  month_day[] = {-1, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    std::string updateYear, updateMonth, updateDay;
+
+    if (is_leapYear(Year) == true)
+        month_day[2] = 29;
+    Day--;
+    if (Day == 0){
+        Month--;
+        if (Month == 0){
+            Month = 12;
+            Year--;
+        }
+        Day = month_day[Month];
+    }
+    updateYear = ft_tostring(Year);
+    updateMonth = Month < 10 ? "0" + ft_tostring(Month):ft_tostring(Month) ;
+    updateDay = Day < 10 ? "0" + ft_tostring(Day):ft_tostring(Day);
+
+    return updateYear + "-" + updateMonth + "-" + updateDay;
+}
+
+std::string BitcoinExchange::ft_tostring(int o_val){
+
+    std::stringstream stream;
+    stream << o_val;
+    return (stream.str());
 }
 
 std::string    BitcoinExchange::trim_space(std::string const& str){
@@ -91,6 +125,13 @@ std::string    BitcoinExchange::trim_space(std::string const& str){
         return str;
     tail = str.find_last_not_of(' ');
     return (str.substr(head, (tail - head + 1)));
+}
+
+bool BitcoinExchange::is_leapYear(int const Year){
+
+    if ((Year % 4 == 0 && Year % 100 != 0) || Year % 400 == 0)
+        return true;
+    return false;
 }
 
 void BitcoinExchange::find_year_range(std::map<std::string, int> &inst){
@@ -117,9 +158,9 @@ void BitcoinExchange::find_year_range(std::map<std::string, int> &inst){
 
 void    BitcoinExchange::is_date_valid(std::string const& date){
 
-    float Year, Month, Day;
-    std::string sYear, sMonth, sDay;
-    std::map<std::string, int> year_range;
+    int                         Year, Month, Day;
+    std::string                 sYear, sMonth, sDay;
+    std::map<std::string, int>  year_range;
 
     if (date.length() != 10)
         throw std::invalid_argument("Error: invalid date.");
@@ -134,19 +175,25 @@ void    BitcoinExchange::is_date_valid(std::string const& date){
     sMonth = date.substr(5 ,2);
     sDay = date.substr(8 ,2);
 
-    std::stringstream nYear(sYear);
-    std::stringstream nMonth(sMonth);
-    std::stringstream nDay(sDay);
-
-    nYear >> Year;
-    nMonth >> Month;
-    nDay >> Day;
+    Year = std::stoi(sYear);
+    Month = std::stoi(sMonth);
+    Day = std::stoi(sDay);
 
     find_year_range(year_range);
     
     if (Year < year_range["min"] || Year > year_range["max"] || Month < 1 || Month > 12 || Day < 1 || Day > 31)
         throw std::invalid_argument("Error: invalid date (Date doesn't existed).");
     
+    if ((Month == 4 || Month == 6 || Month == 9 || Month == 11) && Day > 30)
+        throw std::invalid_argument("Error: invalid date. (Have more than 31 days)");
+    
+    if (Month == 2)
+    {
+        bool leapYear = is_leapYear(Year);
+        if (Day > (leapYear ? 29 : 28))
+            throw std::invalid_argument("Error: invalid date.");
+    }
+
 }
 
 void    BitcoinExchange::is_value_valid(std::string const& value){
