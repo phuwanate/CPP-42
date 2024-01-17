@@ -31,6 +31,7 @@ void    BitcoinExchange::trade(std::string const& file_txt){
     std::string     prevDate;
     std::string     currDate;
     std::map<std::string, std::string>::iterator    it;
+    std::map<std::string, int>  year_range;
 
     if (file.is_open() == false){
         //if file cannot open.
@@ -44,10 +45,8 @@ void    BitcoinExchange::trade(std::string const& file_txt){
     }
     
     std::getline(file, line);
-    if (line != "date | value"){
-        //if header input.txt is invalid
+    if (line != "date | value")
         std::cout << RED << "Error: Invalid format. => " << line << '\n' << DEFAULT;
-    }
     while (std::getline(file, line)){
         
         found = line.find('|');
@@ -58,9 +57,9 @@ void    BitcoinExchange::trade(std::string const& file_txt){
         }
         date = trim_space(line.substr(0, found));
         value = trim_space(line.substr(found + 1));
-
         try
         {
+            find_year_range(year_range);
             is_date_valid(date);
             if (value.empty() == true)
                 throw std::invalid_argument("Error: value is empty.");
@@ -68,13 +67,13 @@ void    BitcoinExchange::trade(std::string const& file_txt){
             it = this->_exchangeData.find(date);
             prevDate = date;
             while(it == _exchangeData.end()){
+                // std::cout << "here" << '\n';
                 currDate = prevDate;
-                prevDate = goback_date(currDate);
+                prevDate = goback_date(currDate, year_range);
                 it = this->_exchangeData.find(prevDate);
             }
 
             std::cout << date << " => " << value << " = ";
-            // std::cout << ft_stof(value) * ft_stof(it->second)<< '\n';
             std::cout << std::stof(value) * std::stof(it->second)<< '\n';
         }catch (std::exception &e){
             std::cout << RED << e.what() << " => " << line << '\n' << DEFAULT;
@@ -83,7 +82,7 @@ void    BitcoinExchange::trade(std::string const& file_txt){
     file.close();
 }
 
-std::string BitcoinExchange::goback_date(const std::string& date){
+std::string BitcoinExchange::goback_date(const std::string& date, std::map<std::string, int> &inst){
 
     int  Year = std::stoi(date.substr(0, 4));
     int  Month = std::stoi(date.substr(5, 2));
@@ -99,6 +98,8 @@ std::string BitcoinExchange::goback_date(const std::string& date){
         if (Month == 0){
             Month = 12;
             Year--;
+            if (Year < inst["min"])
+                throw std::out_of_range("Error: bad input out of database range.");
         }
         Day = month_day[Month];
     }
@@ -160,7 +161,7 @@ void    BitcoinExchange::is_date_valid(std::string const& date){
 
     int                         Year, Month, Day;
     std::string                 sYear, sMonth, sDay;
-    std::map<std::string, int>  year_range;
+    // std::map<std::string, int>  year_range;
 
     if (date.length() != 10)
         throw std::invalid_argument("Error: invalid date.");
@@ -179,9 +180,9 @@ void    BitcoinExchange::is_date_valid(std::string const& date){
     Month = std::stoi(sMonth);
     Day = std::stoi(sDay);
 
-    find_year_range(year_range);
+    // find_year_range(year_range);
     
-    if (Year < year_range["min"] || Year > year_range["max"] || Month < 1 || Month > 12 || Day < 1 || Day > 31)
+    if (Month < 1 || Month > 12 || Day < 1 || Day > 31)
         throw std::invalid_argument("Error: invalid date (Date doesn't existed).");
     
     if ((Month == 4 || Month == 6 || Month == 9 || Month == 11) && Day > 30)

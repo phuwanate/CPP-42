@@ -27,12 +27,12 @@ class BitcoinExchange{
             std::string     trim_space(std::string const& str);
 
             void            find_year_range(std::map<std::string, int> &inst);
-            std::string     goback_date(const std::string& date);
+            std::string     goback_date(const std::string& date, std::map<std::string, int> &inst);
             std::string     ft_tostring(int o_val);
 
             //valid data checker.
             void            is_value_valid(std::string const& value);
-            void            is_date_valid(std::string const& value);
+            void            is_date_valid(std::string const& date);
             bool            is_leapYear(int const Year);
 
             class InvalidFile: public std::exception{
