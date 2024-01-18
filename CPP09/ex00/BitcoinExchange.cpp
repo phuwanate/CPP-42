@@ -45,11 +45,13 @@ void    BitcoinExchange::trade(std::string const& file_txt){
     }
     
     std::getline(file, line);
-    if (line != "date | value")
-        std::cout << RED << "Error: Invalid format. => " << line << '\n' << DEFAULT;
+    // if (line != "date | value")
+    //     std::cout << RED << "Error: Invalid format. => " << line << '\n' << DEFAULT;
     while (std::getline(file, line)){
         
         found = line.find('|');
+        if (found == std::string::npos)
+            found = line.find(',');
         if (found == std::string::npos){
 
             std::cout << RED << "Error: bad input => " << line << '\n' << DEFAULT;
@@ -179,8 +181,6 @@ void    BitcoinExchange::is_date_valid(std::string const& date){
     Year = std::stoi(sYear);
     Month = std::stoi(sMonth);
     Day = std::stoi(sDay);
-
-    // find_year_range(year_range);
     
     if (Month < 1 || Month > 12 || Day < 1 || Day > 31)
         throw std::invalid_argument("Error: invalid date (Date doesn't existed).");
