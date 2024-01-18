@@ -2,14 +2,13 @@
 
 int main(int ac, char **av){
 
-    if (ac != 2)
-    {
+    RPN     rpn;
+
+    if (ac != 2){
+    
         std::cout << RED << "Error: invalid argument" << '\n' << DEFAULT;
         return EXIT_FAILURE;
     }
-
-    RPN     rpn;
-    
-
-
+    rpn.do_rpn(av[1]);
+    return EXIT_SUCCESS;
 }

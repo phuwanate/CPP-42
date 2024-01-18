@@ -22,8 +22,8 @@ class RPN{
             int multiply(int x, int y);
             int divide(int x, int y);
 
-            void        do_rpn(std::string &arg);
-            int         is_ops(std::string &arg, std::string &ops);
+            void        do_rpn(std::string arg);
+            std::size_t is_ops(std::string const& arg);
             std::string check_digit(std::string const& arg);
 
     private:

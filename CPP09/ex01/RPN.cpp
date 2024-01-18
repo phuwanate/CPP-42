@@ -22,27 +22,34 @@ RPN &RPN::operator=(RPN const& inst){
     return *this;
 }
 
-void RPN::do_rpn(std::string &arg){
+void RPN::do_rpn(std::string arg){
 
     std::stringstream   stream(arg);
-    // std::string         ops[] = {"+", "-", "*", "/"};
-    std::string         ops = "+-*/";
     int                 index;
-    int                 x;
-    int                 y;
-
+    int                 first;
+    int                 last;
+    int                 res;
 
     try{
         while (stream >> arg){
 
-            index = is_ops(arg, ops);
+            index = is_ops(arg);
             if (index != -1){
                 if (this->_Stack.size() < 2)
                     throw std::invalid_argument("Error: in stack must have at least 2 numbers.");
+                first = this->_Stack.top();
+                this->_Stack.pop();
+                last = this->_Stack.top();
+                this->_Stack.pop();
+                res = (this->*_func_arr[index])(last, first); 
+                this->_Stack.push(res);
             }
             else
                 this->_Stack.push(std::stoi(check_digit(arg)));
         }
+        if (this->_Stack.size() != 1)
+            throw std::invalid_argument("Error: too many numbers...");
+        std::cout << this->_Stack.top() << '\n';
     }catch(std::exception &e){
         std::cout << e.what() << '\n';
     }
@@ -64,11 +71,13 @@ std::string RPN::check_digit(std::string const& arg){
     return arg;
 }
 
-int RPN::is_ops(std::string &arg, std::string &ops){
+std::size_t RPN::is_ops(std::string const& arg){
 
-    for (int i = 0; i < ops.length(); i++){
-        
-        if (arg[i] == ops[i])
+    std::string ops[] = {"+", "-", "*", "/"};
+
+    for (std::size_t i = 0; i < 4; i++){
+
+        if (arg == ops[i])    
             return i;
     }
     return -1;
