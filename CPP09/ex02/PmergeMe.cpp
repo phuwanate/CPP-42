@@ -1,18 +1,6 @@
 #include "PmergeMe.hpp"
 
-template <typename Container>
-std::string getContainerType(void){}
-
-template <>
-std::string getContainerType<std::vector<int> >(void){
-    return "std::vector<int>";
-}
-
-template <>
-std::string getContainerType<std::deque<int> >(void){
-    return "std::deque<int>";
-}
-
+/////////////////////////////////////////Orthodox Carnonical/////////////////////////////////////
 template <typename Container>
 PmergeMe<Container>::PmergeMe(void): _storage(), _remaining_numb(-1), _end_time(0), _key("before") {}
 
@@ -20,10 +8,7 @@ template <typename Container>
 PmergeMe<Container>::~PmergeMe(void) {}
 
 template <typename Container>
-PmergeMe<Container>::PmergeMe(PmergeMe const& inst){
-
-    *this = inst;
-}
+PmergeMe<Container>::PmergeMe(PmergeMe const& inst){ *this = inst; }
 
 template <typename Container>
 PmergeMe<Container> &PmergeMe<Container>::operator=(PmergeMe const& inst){
@@ -36,18 +21,21 @@ PmergeMe<Container> &PmergeMe<Container>::operator=(PmergeMe const& inst){
     }
     return *this;
 }
+//////////////////////////////////////////////////////////////////////////////////////////////
 
+/////////////////////////////////////////Public zone/////////////////////////////////////////
 template <typename Container>
 PmergeMe<Container>::PmergeMe(char **arg): _storage(), _remaining_numb(-1), _end_time(0), _key("before"){
 
     try{
         std::stringstream   stream;
         std::string         number;
+
         for(std::size_t i = 0; arg[i] != nullptr; i++){
             stream.clear();
             stream << arg[i];
             while (stream >> number) //split
-            {
+            {    
                 __is_integer(number);
                 this->_storage.push_back(std::stoi(number));
             }
@@ -73,12 +61,13 @@ void    PmergeMe<Container>::merge_insertion_sort(void){
         this->_storage.clear();
         this->_storage.push_back(vector_pairs[0].first);
         for (size_type i = 0; i < vector_pairs.size(); i++){
+
             this->_storage.push_back(vector_pairs[i].second);
         }
 
         //Insert all remaining first of each pair to main chain
         for (size_t i = 1; i < vector_pairs.size(); i++){
-
+        
             int index_to_insert = __binary_search(vector_pairs[i].first);
             this->_storage.insert(this->_storage.begin() + index_to_insert, vector_pairs[i].first);
         }
@@ -95,8 +84,8 @@ void    PmergeMe<Container>::merge_insertion_sort(void){
 template <typename Container>
 int    PmergeMe<Container>::__binary_search(int needle){
 
-    int left = 0, right = this->_storage.size() - 1;
-    int middle = 0;
+    int left = 0, middle = 0;
+    int right = this->_storage.size() - 1;
 
     while (left <= right){
 
@@ -128,39 +117,53 @@ void    PmergeMe<Container>::__sort_pairs(vector_of_pair & pairs){
     size_type left_index = 0, right_index = 0, index = 0;
 
     //sort with merge-style compare left and right
-    while (left_index < left_half.size() && right_index < right_half.size()){
+    while (left_index < left_half.size() && right_index < right_half.size())
         pairs[index++] = left_half[left_index].second < right_half[right_index].second ? left_half[left_index++] : right_half[right_index++];
-    }
     //push all remaining left half
     while (left_index < left_half.size())
         pairs[index++] = left_half[left_index++];
-    //push all remaining left half
+    //push all remaining right half
     while (right_index < right_half.size())
         pairs[index++] = right_half[right_index++];
 }
 
+//Getters
 template <typename Container>
-Container	PmergeMe<Container>::getStorage(void) const{
-
-    return this->_storage;
-}
+Container	PmergeMe<Container>::getStorage(void) const{ return this->_storage; }
 
 template <typename Container>
-std::string	PmergeMe<Container>::getKey(void) const{
-    return this->_key;
-}
-template <typename Container>
-double  PmergeMe<Container>::getTime(void) const{
-    return this->_end_time;
-}
+std::string	PmergeMe<Container>::getKey(void) const{ return this->_key; }
 
-//Private Zone
+template <typename Container>
+double  PmergeMe<Container>::getTime(void) const{ return this->_end_time; }
+
+template <typename Container>
+std::string getContainerType(void){}
+
+template <>
+std::string getContainerType<std::vector<int> >(void){ return "std::vector<int>"; }
+
+template <>
+std::string getContainerType<std::deque<int> >(void){ return "std::deque<int>"; }
+
+template <typename Container>
+void    PmergeMe<Container>::time_report(void){
+
+		std::cout << "Time to process a range of " << this->getStorage().size(); 
+        std::cout << " elements with " << getContainerType<Container>() << " : ";
+		std::cout << std::fixed << std::setprecision(5) << this->getTime() << " us";
+		std::cout << '\n';
+}
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////Private Zone/////////////////////////////////////////
 template <typename Container>
 typename  PmergeMe<Container>::vector_of_pair	PmergeMe<Container>::__build_pairs(void){
 
     vector_of_pair  pairs;
 
     if (this->_storage.size() % 2 != 0){
+
         this->_remaining_numb = this->_storage.back();
         this->_storage.pop_back();
     }
@@ -184,7 +187,7 @@ void    PmergeMe<Container>::__is_integer(std::string const& arg){
         throw std::invalid_argument("Error: Negative number.");
     if (arg[0] == '+' && arg.length() == 1)
         throw std::invalid_argument("Error: Bad input");
-    
+
     std::size_t i = (arg[0] == '+' && arg.length() != 0) ? 1 : 0;
     for(; i < arg.length(); i++){
 
@@ -205,15 +208,8 @@ void    PmergeMe<Container>::__is_sort(void){
         if (i == _storage.size() - 1)
             throw std::invalid_argument("All numbers is sorted.");
 }
+//////////////////////////////////////////////////////////////////////////////////////////////
 
-template <typename Container>
-void    PmergeMe<Container>::time_report(void){
-
-		std::cout << "Time to process a range of " << this->getStorage().size(); 
-        std::cout << " elements with " << getContainerType<Container>() << " : ";
-		std::cout << std::fixed << std::setprecision(5) << this->getTime() << " us";
-		std::cout << '\n';
-}
-
+//Only initiate instance of vector and deque of int
 template class PmergeMe< std::vector<int> >;
 template class PmergeMe< std::deque<int> >;
