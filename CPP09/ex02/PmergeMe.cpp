@@ -81,52 +81,6 @@ void    PmergeMe<Container>::merge_insertion_sort(void){
         this->_end_time = static_cast<double>(std::clock() - begin) / CLOCKS_PER_SEC * 1000000;
 }
 
-template <typename Container>
-int    PmergeMe<Container>::__binary_search(int needle){
-
-    int left = 0, middle = 0;
-    int right = this->_storage.size() - 1;
-
-    while (left <= right){
-
-        middle = (left + right) / 2;
-
-        if (this->_storage[middle] == needle)
-            return middle;
-        else if (this->_storage[middle] < needle)
-            left = middle + 1;
-        else
-            right = middle - 1;
-    }
-    return left;
-}
-
-template <typename Container>
-void    PmergeMe<Container>::__sort_pairs(vector_of_pair & pairs){
-
-    if (pairs.size() <= 1)
-        return ;
-
-    size_type half = pairs.size() / 2;
-    vector_of_pair left_half(pairs.begin(), pairs.begin() + half);
-    vector_of_pair right_half(pairs.begin() + half, pairs.end());
-
-    __sort_pairs(left_half);
-    __sort_pairs(right_half);
-    
-    size_type left_index = 0, right_index = 0, index = 0;
-
-    //sort with merge-style compare left and right
-    while (left_index < left_half.size() && right_index < right_half.size())
-        pairs[index++] = left_half[left_index].second < right_half[right_index].second ? left_half[left_index++] : right_half[right_index++];
-    //push all remaining left half
-    while (left_index < left_half.size())
-        pairs[index++] = left_half[left_index++];
-    //push all remaining right half
-    while (right_index < right_half.size())
-        pairs[index++] = right_half[right_index++];
-}
-
 //Getters
 template <typename Container>
 Container	PmergeMe<Container>::getStorage(void) const{ return this->_storage; }
@@ -176,6 +130,52 @@ typename  PmergeMe<Container>::vector_of_pair	PmergeMe<Container>::__build_pairs
     }
 
     return pairs;
+}
+
+template <typename Container>
+void    PmergeMe<Container>::__sort_pairs(vector_of_pair & pairs){
+
+    if (pairs.size() <= 1)
+        return ;
+
+    size_type half = pairs.size() / 2;
+    vector_of_pair left_half(pairs.begin(), pairs.begin() + half);
+    vector_of_pair right_half(pairs.begin() + half, pairs.end());
+
+    __sort_pairs(left_half);
+    __sort_pairs(right_half);
+    
+    size_type left_index = 0, right_index = 0, index = 0;
+
+    //sort with merge-style compare left and right
+    while (left_index < left_half.size() && right_index < right_half.size())
+        pairs[index++] = left_half[left_index].second < right_half[right_index].second ? left_half[left_index++] : right_half[right_index++];
+    //push all remaining left half
+    while (left_index < left_half.size())
+        pairs[index++] = left_half[left_index++];
+    //push all remaining right half
+    while (right_index < right_half.size())
+        pairs[index++] = right_half[right_index++];
+}
+
+template <typename Container>
+int    PmergeMe<Container>::__binary_search(int needle){
+
+    int left = 0, middle = 0;
+    int right = this->_storage.size() - 1;
+
+    while (left <= right){
+
+        middle = (left + right) / 2;
+
+        if (this->_storage[middle] == needle)
+            return middle;
+        else if (this->_storage[middle] < needle)
+            left = middle + 1;
+        else
+            right = middle - 1;
+    }
+    return left;
 }
 
 template <typename Container>
