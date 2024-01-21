@@ -41,9 +41,16 @@ template <typename Container>
 PmergeMe<Container>::PmergeMe(char **arg): _storage(), _remaining_numb(-1), _end_time(0), _key("before"){
 
     try{
+        std::stringstream   stream;
+        std::string         number;
         for(std::size_t i = 0; arg[i] != nullptr; i++){
-            __is_integer(arg[i]);
-            this->_storage.push_back(std::stoi(arg[i]));
+            stream.clear();
+            stream << arg[i];
+            while (stream >> number) //split
+            {
+                __is_integer(number);
+                this->_storage.push_back(std::stoi(number));
+            }
         }
         __is_sort();
     }catch (std::exception &e){

@@ -6,7 +6,7 @@
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 18:51:48 by plertsir          #+#    #+#             */
-/*   Updated: 2024/01/21 11:59:17 by plertsir         ###   ########.fr       */
+/*   Updated: 2024/01/21 14:19:39 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int main(int ac, char **av){
 
-    if (ac < 3){
+    if (ac < 2){
         std::cout << "Error: Invalid argument." << '\n';
         return EXIT_FAILURE;
     }
