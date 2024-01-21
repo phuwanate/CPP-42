@@ -36,7 +36,7 @@ void RPN::do_rpn(std::string arg){
             index = is_ops(arg);
             if (index != -1){
                 if (this->_Stack.size() < 2)
-                    throw std::invalid_argument("Error: in stack must have at least 2 numbers.");
+                    throw std::invalid_argument("Error: in stack must have at least 2 numbers before an operator.");
                 first = this->_Stack.top();
                 this->_Stack.pop();
                 last = this->_Stack.top();
