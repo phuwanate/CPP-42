@@ -58,27 +58,25 @@ void    PmergeMe<Container>::merge_insertion_sort(void){
         this->_key = "after";
         std::clock_t    begin = std::clock();
 
-
+        //Build a vector of pairs.
         vector_of_pair  vector_pairs = __build_pairs();
-        std::vector<int> insert_index = __build_insertion_indexes(this->_storage.size());
         __sort_pairs(vector_pairs);
 
-        //Build main chain
+        //Build main chain (first of pairs[0] and all second of each pair)
         this->_storage.clear();
         this->_storage.push_back(vector_pairs[0].first);
         for (size_type i = 0; i < vector_pairs.size(); i++){
             this->_storage.push_back(vector_pairs[i].second);
         }
 
-        for (size_t i = 0; i < insert_index.size(); i++){
+        //Insert all remaining first of each pair to main chain
+        for (size_t i = 1; i < vector_pairs.size(); i++){
 
-            //if index to insert is out of pair size
-            if (size_t(insert_index[i] - 1) >= vector_pairs.size())
-                continue ;
-            int index_to_insert = __binary_search(vector_pairs[insert_index[i] - 1].first);
-            this->_storage.insert(this->_storage.begin() + index_to_insert, vector_pairs[insert_index[i] - 1].first);
+            int index_to_insert = __binary_search(vector_pairs[i].first);
+            this->_storage.insert(this->_storage.begin() + index_to_insert, vector_pairs[i].first);
         }
 
+        //Insert remaining number
         if (this->_remaining_numb != -1){
 
             int index_to_insert = __binary_search(this->_remaining_numb);
@@ -168,33 +166,6 @@ typename  PmergeMe<Container>::vector_of_pair	PmergeMe<Container>::__build_pairs
     }
 
     return pairs;
-}
-
-template <typename Container>
-std::vector<int>	PmergeMe<Container>::__build_insertion_indexes(std::size_t N){
-
-    std::vector<int> insert_index;
-    int jacobsthal_number[N + 2];
-    int last_jacobsthal_number = 2;
-
-    jacobsthal_number[0] = 0;
-    jacobsthal_number[1] = 1;
-
-    for (size_t i = 2; insert_index.size() < N; i++){
-        
-        jacobsthal_number[i] = jacobsthal_number[i - 1] + 2 * jacobsthal_number[i - 2];
-        if (i != 2)
-            insert_index.push_back(jacobsthal_number[i]);
-
-        for (int j = jacobsthal_number[i] - 1; j > last_jacobsthal_number; j--)
-            insert_index.push_back(j);
-        
-        last_jacobsthal_number = jacobsthal_number[i];
-    }
-    for (size_t i = 0; i < insert_index.size(); i++)
-        std::cout << insert_index[i] << " ";
-    std::cout << '\n';
-    return (insert_index);
 }
 
 template <typename Container>

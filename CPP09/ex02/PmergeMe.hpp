@@ -26,7 +26,6 @@ class PmergeMe{
 			std::string	_key;
 
 			vector_of_pair		__build_pairs(void);
-			std::vector<int>	__build_insertion_indexes(std::size_t N);
 			void				__sort_pairs(vector_of_pair & pairs);
 			int					__binary_search(int needle);
 			void				__is_integer(std::string const& arg);
@@ -50,19 +49,14 @@ class PmergeMe{
 template <typename Container>
 std::ostream &operator<<(std::ostream &o, PmergeMe<Container> const& inst){
 
-	if (inst.getKey() == "before"){
+	if (inst.getKey() == "before")
 		o << "Before: ";
-		for (std::size_t i = 0; i < inst.getStorage().size(); i++)
-			o << inst.getStorage()[i] << " ";
-		o << '\n';
-	}
 	else if (inst.getKey() == "after")
-	{
 		o << "After: ";
-		for (std::size_t i = 0; i < inst.getStorage().size(); i++)
-			o << inst.getStorage()[i] << " ";
-		o << '\n';
-	}
+	for (std::size_t i = 0; i < inst.getStorage().size(); i++)
+		o << inst.getStorage()[i] << " ";
+	o << '\n';
+
 	return o;
 }
 
