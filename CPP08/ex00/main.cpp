@@ -11,7 +11,7 @@ int main(void){
     for(std::vector<int>::iterator it = v.begin(); it != v.end(); it++)   
         std::cout << *it << " ";
     std::cout << "]" << std::endl;
-    easyfind(v, 42);
+    easyfind< std::vector<int> >(v, 42);
     std::cout << std::endl;
 
     std::list<int>  l;
