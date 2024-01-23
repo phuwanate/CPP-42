@@ -40,9 +40,11 @@ PmergeMe<Container>::PmergeMe(char **arg): _storage(), _remaining_numb(-1), _end
                 _storage.push_back(__ft_to_number(number));
             }
         }
+        if (_storage.size() == 0)
+            throw std::invalid_argument("Error: empty arguments.");
         __is_sort();
     }catch (std::exception &e){
-        std::cout << e.what() << '\n';
+        std::cout << RED << e.what() << '\n' << DEFAULT;
         exit(1);
     }
 }

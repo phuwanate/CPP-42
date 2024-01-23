@@ -1,6 +1,8 @@
 #ifndef PMERGEME_HPP
 # define PMERGEME_HPP
 
+#define DEFAULT "\033[0m"
+#define RED     "\033[31m"
 
 #include <iostream>
 #include <vector>
