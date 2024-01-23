@@ -10,43 +10,51 @@
 #include <exception>
 #include <fstream>
 #include <sstream>
+#include <limits>
+#include <stddef.h>
 
 
 class BitcoinExchange{
 
-    private:
-            std::map<std::string, std::string>  _exchangeData;
-
     public:
-            BitcoinExchange(void);
-            ~BitcoinExchange(void);
-            BitcoinExchange(BitcoinExchange const& inst);
-            BitcoinExchange &operator=(BitcoinExchange const& inst);
-            
-            void            trade(std::string const& file_txt);
-            std::string     trim_space(std::string const& str);
+	    typedef std::map<std::size_t, float>::iterator iterator;
+ 
+	    BitcoinExchange(void);
+	    ~BitcoinExchange(void);
+	    BitcoinExchange(BitcoinExchange const& inst);
+	    BitcoinExchange &operator=(BitcoinExchange const& inst);
 
-            void            find_year_range(std::map<std::string, int> &inst);
-            std::string     goback_date(const std::string& date, std::map<std::string, int> &inst);
-            std::string     ft_tostring(int o_val);
+	    void            trade(std::string const& file_txt);
+	    
+	    //Setters
+	    void            setCurrdate(std::size_t currDate);
+	    void            setPrevdate(std::size_t prevDate);
+	    void            setDate(std::string const& date);
+	    void            setValue(std::string const& value);
 
-            //valid data checker.
-            void            is_value_valid(std::string const& value);
-            void            is_date_valid(std::string const& date);
-            bool            is_leapYear(int const Year);
+    private:
+	    std::map<std::size_t, float>	_exchangeData;
+	    std::map<std::size_t, float>	_wallet;
+	    std::map<std::string, int>     	_year_range;
+	    iterator				_it;	
+	    std::string                         _line, _date, _value;
+	    std::size_t                         _prevDate, _currDate;
+	    int 				_Year, _Month, _Day;
 
-            class InvalidFile: public std::exception{
-
-                virtual const char* what() const throw();
-            };
-            class InvalidArgument: public std::exception{
-
-                virtual const char* what() const throw();
-            };
-            class InvalidValue: public std::exception{
-
-                virtual const char* what() const throw();
-            };
+	    void		__read_input(void);
+	    void		__init_var(void);
+	    void            	__find_year_range(std::map<std::string, int> &inst);
+	    float		__clean_value(std::string const& value);
+	    std::size_t		__clean_date(std::string const& date);
+	    std::size_t     	__goback_date(void);
+	    std::string     	__trim_space(std::string const& str);
+    
+	   //Valid data checker.
+	    void            	__check_file(std::ifstream & file);
+	    void            	__is_value_valid(std::string const& value);
+	    void            	__is_date_valid(void);
+	    void            	__check_date_value(void);
+	    bool            	__is_leapYear(int const Year);
 
 };
 

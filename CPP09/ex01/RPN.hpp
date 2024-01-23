@@ -9,28 +9,34 @@
 #include <stack>
 #include <sstream>
 #include <exception>
+#include <stdexcept>
+#include <limits>
 
 class RPN{
-    public:
-            RPN(void);
-            ~RPN(void);
-            RPN(RPN const& inst);
-            RPN &operator=(RPN const& inst);
+	public:
+								RPN(void);
+								~RPN(void);
+								RPN(RPN const& inst);
+								RPN &operator=(RPN const& inst);
+		void                    do_rpn(std::string arg);
 
-            int add(int x, int y);
-            int subtract(int x, int y);
-            int multiply(int x, int y);
-            int divide(int x, int y);
+	private:
+			std::stack<int>     	_Stack;
+			int                 	_res;
 
-            void        do_rpn(std::string arg);
-            std::size_t is_ops(std::string const& arg);
-            std::string check_digit(std::string const& arg);
+			std::plus<int>          __add;
+			std::minus<int>         __minus;
+			std::multiplies<int>    __multiply;
+			std::divides<int>       __divide;
 
-    private:
-            std::stack<int>     _Stack;
-            
-            typedef int (RPN::*func_ptr)(int, int);
-            RPN::func_ptr   _func_arr[4];
+			std::size_t		__is_ops(std::string const& arg);
+			std::string		__check_digit(std::string const& arg);
+
+			bool            __find_operator(int index, int x, int y);
+			
+			//Convert string to numeric.
+			template <typename T>
+			T               __ft_to_number(std::string const& str);
 };
 
 #endif

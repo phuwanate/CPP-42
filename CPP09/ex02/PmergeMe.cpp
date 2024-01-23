@@ -15,9 +15,9 @@ PmergeMe<Container> &PmergeMe<Container>::operator=(PmergeMe const& inst){
 
     if (this != &inst){
 
-        this->_storage = inst._storage;
-        this->_remaining_numb = inst._remaining_numb;
-        this->_end_time = inst._end_time;
+        _storage = inst._storage;
+        _remaining_numb = inst._remaining_numb;
+        _end_time = inst._end_time;
     }
     return *this;
 }
@@ -37,7 +37,7 @@ PmergeMe<Container>::PmergeMe(char **arg): _storage(), _remaining_numb(-1), _end
             while (stream >> number) //split
             {    
                 __is_integer(number);
-                this->_storage.push_back(std::stoi(number));
+                _storage.push_back(__ft_to_number(number));
             }
         }
         __is_sort();
@@ -50,7 +50,7 @@ PmergeMe<Container>::PmergeMe(char **arg): _storage(), _remaining_numb(-1), _end
 template <typename Container>
 void    PmergeMe<Container>::merge_insertion_sort(void){
 
-        this->_key = "after";
+        _key = "after";
         std::clock_t    begin = std::clock();
 
         //Build a vector of pairs.
@@ -58,38 +58,38 @@ void    PmergeMe<Container>::merge_insertion_sort(void){
         __sort_pairs(vector_pairs);
 
         //Build main chain (first of pairs[0] and all second of each pair)
-        this->_storage.clear();
-        this->_storage.push_back(vector_pairs[0].first);
+        _storage.clear();
+        _storage.push_back(vector_pairs[0].first);
         for (size_type i = 0; i < vector_pairs.size(); i++){
 
-            this->_storage.push_back(vector_pairs[i].second);
+            _storage.push_back(vector_pairs[i].second);
         }
 
         //Insert all remaining first of each pair to main chain
         for (size_t i = 1; i < vector_pairs.size(); i++){
         
             int index_to_insert = __binary_search(vector_pairs[i].first);
-            this->_storage.insert(this->_storage.begin() + index_to_insert, vector_pairs[i].first);
+            _storage.insert(_storage.begin() + index_to_insert, vector_pairs[i].first);
         }
 
         //Insert remaining number
-        if (this->_remaining_numb != -1){
+        if (_remaining_numb != -1){
 
-            int index_to_insert = __binary_search(this->_remaining_numb);
-            this->_storage.insert(this->_storage.begin() + index_to_insert, _remaining_numb);
+            int index_to_insert = __binary_search(_remaining_numb);
+            _storage.insert(_storage.begin() + index_to_insert, _remaining_numb);
         }
-        this->_end_time = static_cast<double>(std::clock() - begin) / CLOCKS_PER_SEC * 1000000;
+        _end_time = static_cast<double>(std::clock() - begin) / CLOCKS_PER_SEC * 1000000;
 }
 
 //Getters
 template <typename Container>
-Container	PmergeMe<Container>::getStorage(void) const{ return this->_storage; }
+Container	PmergeMe<Container>::getStorage(void) const{ return _storage; }
 
 template <typename Container>
-std::string	PmergeMe<Container>::getKey(void) const{ return this->_key; }
+std::string	PmergeMe<Container>::getKey(void) const{ return _key; }
 
 template <typename Container>
-double  PmergeMe<Container>::getTime(void) const{ return this->_end_time; }
+double  PmergeMe<Container>::getTime(void) const{ return _end_time; }
 
 template <typename Container>
 std::string getContainerType(void){}
@@ -103,9 +103,9 @@ std::string getContainerType<std::deque<int> >(void){ return "std::deque<int>"; 
 template <typename Container>
 void    PmergeMe<Container>::time_report(void){
 
-		std::cout << "Time to process a range of " << this->getStorage().size(); 
+		std::cout << "Time to process a range of " << getStorage().size(); 
         std::cout << " elements with " << getContainerType<Container>() << " : ";
-		std::cout << std::fixed << std::setprecision(5) << this->getTime() << " us";
+		std::cout << std::fixed << std::setprecision(5) << getTime() << " us";
 		std::cout << '\n';
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,17 +116,17 @@ typename  PmergeMe<Container>::vector_of_pair	PmergeMe<Container>::__build_pairs
 
     vector_of_pair  pairs;
 
-    if (this->_storage.size() % 2 != 0){
+    if (_storage.size() % 2 != 0){
 
-        this->_remaining_numb = this->_storage.back();
-        this->_storage.pop_back();
+        _remaining_numb = _storage.back();
+        _storage.pop_back();
     }
 
-    for (size_type i = 0; i < this->_storage.size(); i+=2){
+    for (size_type i = 0; i < _storage.size(); i+=2){
 
-        if (this->_storage[i] > this->_storage[i + 1])
-            std::swap(this->_storage[i], this->_storage[i + 1]);
-        pairs.push_back(std::make_pair(this->_storage[i], this->_storage[i + 1]));
+        if (_storage[i] > _storage[i + 1])
+            std::swap(_storage[i], _storage[i + 1]);
+        pairs.push_back(std::make_pair(_storage[i], _storage[i + 1]));
     }
 
     return pairs;
@@ -162,15 +162,15 @@ template <typename Container>
 int    PmergeMe<Container>::__binary_search(int needle){
 
     int left = 0, middle = 0;
-    int right = this->_storage.size() - 1;
+    int right = _storage.size() - 1;
 
     while (left <= right){
 
         middle = (left + right) / 2;
 
-        if (this->_storage[middle] == needle)
+        if (_storage[middle] == needle)
             return middle;
-        else if (this->_storage[middle] < needle)
+        else if (_storage[middle] < needle)
             left = middle + 1;
         else
             right = middle - 1;
@@ -201,13 +201,24 @@ void    PmergeMe<Container>::__is_sort(void){
 
         std::size_t i = 0;
 
-        for(; i < this->_storage.size() - 1; i++){
-            if (this->_storage[i] > this->_storage[i + 1])
+        for(; i < _storage.size() - 1; i++){
+            if (_storage[i] > _storage[i + 1])
                 break ;
         }
         if (i == _storage.size() - 1)
             throw std::invalid_argument("All numbers is sorted.");
 }
+
+template <typename Container>
+int PmergeMe<Container>::__ft_to_number(std::string const& str){
+
+    std::stringstream   stream(str);
+    int tmp;
+
+    stream >> tmp;
+    return (tmp);
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //Only initiate instance of vector and deque of int
