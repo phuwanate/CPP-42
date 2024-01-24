@@ -48,8 +48,10 @@ void            BitcoinExchange::__read_input(void){
     std::string     line;
 
     std::getline(file, line);
-    while (std::getline(file, line))
+    while (std::getline(file, line)){
+        
         _exchangeData[__clean_date(line.substr(0, line.find(',')))] = __clean_value(line.substr(line.find(',') + 1));
+    }
     __init_var();
     file.close();
 }
@@ -117,7 +119,7 @@ void    BitcoinExchange::__is_date_valid(void){
     
     _Year = _it->first / 10000;
     _Month = (_it->first % 10000) / 100;
-    _Day = (_it->first % 10000) % 100;  
+    _Day = (_it->first % 10000) % 100;
 
     if (_Month < 1 || _Month > 12 || _Day < 1 || _Day > 31)
         throw std::invalid_argument("Error: invalid date (Date doesn't existed).");
@@ -240,11 +242,13 @@ void    BitcoinExchange::trade(std::string const& file_txt){
             setPrevdate(_it->first);
             iterator it_data = _exchangeData.find(_it->first);
             for (; it_data == _exchangeData.end(); it_data = _exchangeData.find(_prevDate)){
+                
                 setCurrdate(_prevDate);
                 setPrevdate(__goback_date());
             }
             std::cout << _date << " => " << _value << " = " << _it->second * it_data->second << '\n';
         }catch (std::exception &e){
+
             std::cout << RED << e.what() << " => " << _line << '\n' << DEFAULT;
         }
     }

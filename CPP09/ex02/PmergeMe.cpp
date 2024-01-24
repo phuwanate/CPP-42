@@ -166,12 +166,14 @@ void    PmergeMe<Container, T>::__is_sort(void){
 }
 
 template <typename Container, typename T>
-int PmergeMe<Container, T>::__ft_to_number(std::string const& str){
+long PmergeMe<Container, T>::__ft_to_number(std::string const& str){
 
     std::stringstream   stream(str);
-    int tmp;
+    long tmp;
 
     stream >> tmp;
+    if (tmp > INT_MAX)
+        throw std::overflow_error("Error: Overflow.");
     return (tmp);
 }
 

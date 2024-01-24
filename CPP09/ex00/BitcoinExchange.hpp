@@ -13,7 +13,6 @@
 #include <limits>
 #include <stddef.h>
 
-
 class BitcoinExchange{
 
     public:

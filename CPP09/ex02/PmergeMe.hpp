@@ -32,7 +32,7 @@ class PmergeMe{
 			void				__is_sort(void);
 
 			//Convert string to numeric.
-			int      			__ft_to_number(std::string const& str);
+			long      			__ft_to_number(std::string const& str);
 
 	
 	public:
