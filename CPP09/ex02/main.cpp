@@ -6,7 +6,7 @@
 /*   By: plertsir <plertsir@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/20 18:51:48 by plertsir          #+#    #+#             */
-/*   Updated: 2024/01/24 03:36:01 by plertsir         ###   ########.fr       */
+/*   Updated: 2024/01/24 12:36:34 by plertsir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ int main(int ac, char **av){
         return EXIT_FAILURE;
     }
     try{
-        PmergeMe<std::vector<int> >  v(av + 1);
+        PmergeMe<std::vector<int>, std::vector<std::pair<int, int> > >  v(av + 1);
         std::cout << v;
         v.merge_insertion_sort();//before
 
-        PmergeMe<std::deque<int> >  d(av + 1);
+        PmergeMe<std::deque<int>, std::deque<std::pair<int, int> > >  d(av + 1);
         d.merge_insertion_sort();//after
         std::cout << d;
         

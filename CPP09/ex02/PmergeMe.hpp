@@ -12,29 +12,28 @@
 #include <sstream>
 #include <exception>
 
-template <typename Container>
+template <typename Container, typename T>
 class PmergeMe{
 
 	public:
 			typedef typename Container::value_type      	val_type;
 			typedef typename Container::size_type       	size_type;
-			typedef typename std::pair <val_type, val_type>	pair_type;
-			typedef typename std::vector<pair_type>			vector_of_pair;
 
 	private:
-			Container	_storage;
-			val_type	_remaining_numb;
-			double		_end_time;
-			std::string	_key;
+			Container			_storage;
+			val_type			_remaining_numb;
+			double				_end_time;
+			std::string			_key;
 
-			vector_of_pair		__build_pairs(void);
-			void				__sort_pairs(vector_of_pair & pairs);
+			T					__build_pairs(void);
 			int					__binary_search(int needle);
+			void				__sort_pairs(T & pairs);
 			void				__is_integer(std::string const& arg);
 			void				__is_sort(void);
 
 			//Convert string to numeric.
 			int      			__ft_to_number(std::string const& str);
+
 	
 	public:
 			PmergeMe(void);
@@ -43,16 +42,17 @@ class PmergeMe{
 			PmergeMe(PmergeMe const& inst);
 			PmergeMe &operator=(PmergeMe const& inst);
 
-			Container	getStorage(void) const;
-			std::string getKey(void) const;
-			double		getTime(void) const;
+			Container			getStorage(void) const;
+			std::string 		getContainerType(void);
+			std::string 		getKey(void) const;
+			double				getTime(void) const;
 
-			void	merge_insertion_sort(void);
-			void	time_report(void);
+			void				merge_insertion_sort(void);
+			void				time_report(void);
 };
 
-template <typename Container>
-std::ostream &operator<<(std::ostream &o, PmergeMe<Container> const& inst){
+template <typename Container, typename T >
+std::ostream &operator<<(std::ostream &o, PmergeMe<Container, T> const& inst){
 
 	if (inst.getKey() == "before")
 		o << "Before: ";

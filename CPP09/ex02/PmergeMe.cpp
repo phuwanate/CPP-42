@@ -1,17 +1,17 @@
 #include "PmergeMe.hpp"
 
 /////////////////////////////////////////Orthodox Carnonical/////////////////////////////////////
-template <typename Container>
-PmergeMe<Container>::PmergeMe(void): _storage(), _remaining_numb(-1), _end_time(0), _key("before") {}
+template <typename Container, typename T>
+PmergeMe<Container, T>::PmergeMe(void): _storage(), _remaining_numb(-1), _end_time(0), _key("before") {}
 
-template <typename Container>
-PmergeMe<Container>::~PmergeMe(void) {}
+template <typename Container, typename T>
+PmergeMe<Container, T>::~PmergeMe(void) {}
 
-template <typename Container>
-PmergeMe<Container>::PmergeMe(PmergeMe const& inst){ *this = inst; }
+template <typename Container, typename T>
+PmergeMe<Container, T>::PmergeMe(PmergeMe const& inst){ *this = inst; }
 
-template <typename Container>
-PmergeMe<Container> &PmergeMe<Container>::operator=(PmergeMe const& inst){
+template <typename Container, typename T>
+PmergeMe<Container, T> &PmergeMe<Container, T>::operator=(PmergeMe const& inst){
 
     if (this != &inst){
 
@@ -24,8 +24,8 @@ PmergeMe<Container> &PmergeMe<Container>::operator=(PmergeMe const& inst){
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////Public zone/////////////////////////////////////////
-template <typename Container>
-PmergeMe<Container>::PmergeMe(char **arg): _storage(), _remaining_numb(-1), _end_time(0), _key("before"){
+template <typename Container, typename T>
+PmergeMe<Container, T>::PmergeMe(char **arg): _storage(), _remaining_numb(-1), _end_time(0), _key("before"){
 
     try{
         std::stringstream   stream;
@@ -49,29 +49,39 @@ PmergeMe<Container>::PmergeMe(char **arg): _storage(), _remaining_numb(-1), _end
     }
 }
 
-template <typename Container>
-void    PmergeMe<Container>::merge_insertion_sort(void){
+template <typename Container, typename T>
+std::string PmergeMe<Container, T>::getContainerType(void){ 
+    
+    if (typeid(Container) == typeid(std::vector<int>))
+        return "std::vector<int>";
+    else if (typeid(Container) == typeid(std::deque<int>))
+        return "std::deque<int>";
+    return "Unkown.";
+}
+
+template <typename Container, typename T>
+void    PmergeMe<Container, T>::merge_insertion_sort(void){
 
         _key = "after";
         std::clock_t    begin = std::clock();
-
+        
         //Build a vector of pairs.
-        vector_of_pair  vector_pairs = __build_pairs();
-        __sort_pairs(vector_pairs);
+        T pairs = __build_pairs();
+        __sort_pairs(pairs);
 
         //Build main chain (first of pairs[0] and all second of each pair)
         _storage.clear();
-        _storage.push_back(vector_pairs[0].first);
-        for (size_type i = 0; i < vector_pairs.size(); i++){
+        _storage.push_back(pairs[0].first);
+        for (size_type i = 0; i < pairs.size(); i++){
 
-            _storage.push_back(vector_pairs[i].second);
+            _storage.push_back(pairs[i].second);
         }
 
         //Insert all remaining first of each pair to main chain
-        for (size_t i = 1; i < vector_pairs.size(); i++){
+        for (size_t i = 1; i < pairs.size(); i++){
         
-            int index_to_insert = __binary_search(vector_pairs[i].first);
-            _storage.insert(_storage.begin() + index_to_insert, vector_pairs[i].first);
+            int index_to_insert = __binary_search(pairs[i].first);
+            _storage.insert(_storage.begin() + index_to_insert, pairs[i].first);
         }
 
         //Insert remaining number
@@ -84,84 +94,28 @@ void    PmergeMe<Container>::merge_insertion_sort(void){
 }
 
 //Getters
-template <typename Container>
-Container	PmergeMe<Container>::getStorage(void) const{ return _storage; }
+template <typename Container, typename T>
+Container	PmergeMe<Container, T>::getStorage(void) const{ return _storage; }
 
-template <typename Container>
-std::string	PmergeMe<Container>::getKey(void) const{ return _key; }
+template <typename Container, typename T>
+std::string	PmergeMe<Container, T>::getKey(void) const{ return _key; }
 
-template <typename Container>
-double  PmergeMe<Container>::getTime(void) const{ return _end_time; }
+template <typename Container, typename T>
+double  PmergeMe<Container, T>::getTime(void) const{ return _end_time; }
 
-template <typename Container>
-std::string getContainerType(void){}
-
-template <>
-std::string getContainerType<std::vector<int> >(void){ return "std::vector<int>"; }
-
-template <>
-std::string getContainerType<std::deque<int> >(void){ return "std::deque<int>"; }
-
-template <typename Container>
-void    PmergeMe<Container>::time_report(void){
+template <typename Container, typename T>
+void    PmergeMe<Container, T>::time_report(void){
 
 		std::cout << "Time to process a range of " << getStorage().size(); 
-        std::cout << " elements with " << getContainerType<Container>() << " : ";
+        std::cout << " elements with " << getContainerType() << " : ";
 		std::cout << std::fixed << std::setprecision(5) << getTime() << " us";
 		std::cout << '\n';
 }
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////Private Zone/////////////////////////////////////////
-template <typename Container>
-typename  PmergeMe<Container>::vector_of_pair	PmergeMe<Container>::__build_pairs(void){
-
-    vector_of_pair  pairs;
-
-    if (_storage.size() % 2 != 0){
-
-        _remaining_numb = _storage.back();
-        _storage.pop_back();
-    }
-
-    for (size_type i = 0; i < _storage.size(); i+=2){
-
-        if (_storage[i] > _storage[i + 1])
-            std::swap(_storage[i], _storage[i + 1]);
-        pairs.push_back(std::make_pair(_storage[i], _storage[i + 1]));
-    }
-
-    return pairs;
-}
-
-template <typename Container>
-void    PmergeMe<Container>::__sort_pairs(vector_of_pair & pairs){
-
-    if (pairs.size() <= 1)
-        return ;
-
-    size_type half = pairs.size() / 2;
-    vector_of_pair left_half(pairs.begin(), pairs.begin() + half);
-    vector_of_pair right_half(pairs.begin() + half, pairs.end());
-
-    __sort_pairs(left_half);
-    __sort_pairs(right_half);
-    
-    size_type left_index = 0, right_index = 0, index = 0;
-
-    //sort with merge-style compare left and right
-    while (left_index < left_half.size() && right_index < right_half.size())
-        pairs[index++] = left_half[left_index].second < right_half[right_index].second ? left_half[left_index++] : right_half[right_index++];
-    //push all remaining left half
-    while (left_index < left_half.size())
-        pairs[index++] = left_half[left_index++];
-    //push all remaining right half
-    while (right_index < right_half.size())
-        pairs[index++] = right_half[right_index++];
-}
-
-template <typename Container>
-int    PmergeMe<Container>::__binary_search(int needle){
+template <typename Container, typename T>
+int    PmergeMe<Container, T>::__binary_search(int needle){
 
     int left = 0, middle = 0;
     int right = _storage.size() - 1;
@@ -180,8 +134,8 @@ int    PmergeMe<Container>::__binary_search(int needle){
     return left;
 }
 
-template <typename Container>
-void    PmergeMe<Container>::__is_integer(std::string const& arg){
+template <typename Container, typename T>
+void    PmergeMe<Container, T>::__is_integer(std::string const& arg){
 
     if (arg.empty())
         throw std::invalid_argument("Error: Empty argument.");
@@ -198,8 +152,8 @@ void    PmergeMe<Container>::__is_integer(std::string const& arg){
     }
 }
 
-template <typename Container>
-void    PmergeMe<Container>::__is_sort(void){
+template <typename Container, typename T>
+void    PmergeMe<Container, T>::__is_sort(void){
 
         std::size_t i = 0;
 
@@ -211,8 +165,8 @@ void    PmergeMe<Container>::__is_sort(void){
             throw std::invalid_argument("All numbers is sorted.");
 }
 
-template <typename Container>
-int PmergeMe<Container>::__ft_to_number(std::string const& str){
+template <typename Container, typename T>
+int PmergeMe<Container, T>::__ft_to_number(std::string const& str){
 
     std::stringstream   stream(str);
     int tmp;
@@ -221,8 +175,55 @@ int PmergeMe<Container>::__ft_to_number(std::string const& str){
     return (tmp);
 }
 
+template <typename Container, typename T>
+T	PmergeMe<Container, T>::__build_pairs(void){
+
+    T  pairs;
+
+    if (_storage.size() % 2 != 0){
+
+        _remaining_numb = _storage.back();
+        _storage.pop_back();
+    }
+
+    for (size_t i = 0; i < _storage.size(); i+=2){
+
+        if (_storage[i] > _storage[i + 1])
+            std::swap(_storage[i], _storage[i + 1]);
+        pairs.push_back(std::make_pair(_storage[i], _storage[i + 1]));
+    }
+
+    return pairs;
+}
+
+template <typename Container, typename T>
+void    PmergeMe<Container, T>::__sort_pairs(T & pairs){
+
+    if (pairs.size() <= 1)
+        return ;
+
+    std::size_t half = pairs.size() / 2;
+    T left_half(pairs.begin(), pairs.begin() + half);
+    T right_half(pairs.begin() + half, pairs.end());
+
+    __sort_pairs(left_half);
+    __sort_pairs(right_half);
+    
+    std::size_t left_index = 0, right_index = 0, index = 0;
+
+    //sort with merge-style compare left and right
+    while (left_index < left_half.size() && right_index < right_half.size())
+        pairs[index++] = left_half[left_index].second < right_half[right_index].second ? left_half[left_index++] : right_half[right_index++];
+    //push all remaining left half
+    while (left_index < left_half.size())
+        pairs[index++] = left_half[left_index++];
+    //push all remaining right half
+    while (right_index < right_half.size())
+        pairs[index++] = right_half[right_index++];
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //Only initiate instance of vector and deque of int
-template class PmergeMe< std::vector<int> >;
-template class PmergeMe< std::deque<int> >;
+template class PmergeMe< std::vector<int>, std::vector<std::pair<int, int> > >;
+template class PmergeMe< std::deque<int>, std::deque<std::pair<int, int> > >;

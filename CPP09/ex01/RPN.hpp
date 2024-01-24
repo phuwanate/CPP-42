@@ -14,11 +14,11 @@
 
 class RPN{
 	public:
-								RPN(void);
-								~RPN(void);
-								RPN(RPN const& inst);
-								RPN &operator=(RPN const& inst);
-		void                    do_rpn(std::string arg);
+									RPN(void);
+									~RPN(void);
+									RPN(RPN const& inst);
+									RPN &operator=(RPN const& inst);
+		void                    	do_rpn(std::string arg);
 
 	private:
 			std::stack<int>     	_Stack;
@@ -29,14 +29,14 @@ class RPN{
 			std::multiplies<int>    __multiply;
 			std::divides<int>       __divide;
 
-			std::size_t		__is_ops(std::string const& arg);
-			std::string		__check_digit(std::string const& arg);
+			std::size_t				__is_ops(std::string const& arg);
+			std::string				__check_digit(std::string const& arg);
 
-			bool            __find_operator(int index, int x, int y);
+			bool            		__find_operator(int index, int x, int y);
 			
 			//Convert string to numeric.
 			template <typename T>
-			T               __ft_to_number(std::string const& str);
+			T               		__ft_to_number(std::string const& str);
 };
 
 #endif
