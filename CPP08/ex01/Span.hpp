@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <exception>
 #include <algorithm>
 

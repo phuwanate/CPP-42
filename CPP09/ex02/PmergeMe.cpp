@@ -223,7 +223,6 @@ void    PmergeMe<Container, T>::__sort_pairs(T & pairs){
     while (right_index < right_half.size())
         pairs[index++] = right_half[right_index++];
 }
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //Only initiate instance of vector and deque of int

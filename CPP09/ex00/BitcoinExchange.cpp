@@ -49,16 +49,56 @@ void            BitcoinExchange::__read_input(void){
 
     std::getline(file, line);
     while (std::getline(file, line)){
-        
-        _exchangeData[__clean_date(line.substr(0, line.find(',')))] = __clean_value(line.substr(line.find(',') + 1));
+        try{
+            setDate(line.substr(0, line.find(',')));
+            setValue(line.substr(line.find(',') + 1));
+            __database_date_vaild();
+            __database_value_vaild();
+            _exchangeData[__clean_date(_date)] = __clean_value(_value);
+        }catch(std::exception &e){
+            std::cout << RED << e.what() << '\n' << DEFAULT;
+            exit (EXIT_FAILURE);
+        }
+        // _exchangeData[__clean_date(line.substr(0, line.find(',')))] = __clean_value(line.substr(line.find(',') + 1));
     }
     __init_var();
     file.close();
 }
 
+void    BitcoinExchange::__database_date_vaild(void){
+
+    if (_date.length() != 10)
+        throw std::invalid_argument("Error: File.csv has invalid date format.");
+    if (_date.find_first_of('-') != 4 || _date.find_last_of('-') != 7)
+        throw std::invalid_argument("Error: File.csv has invalid date format.");
+    for (std::size_t i = 0; i< _date.length(); i++)
+    {
+        if (std::isdigit(_date[i]) == 0 && _date[i] != '-')
+            throw std::invalid_argument("Error: File.csv has invalid date format.");
+    }
+}
+
+void    BitcoinExchange::__database_value_vaild(void){
+    
+    if (std::find(_value.begin(), _value.end(), '.') != _value.end()){
+
+        if (_value.find('.') == 0)
+            throw std::invalid_argument("Error: File.csv has invalid value format.");
+        else if (_value.find('.') == _value.length() - 1)
+            throw std::invalid_argument("Error: File.csv has invalid value format.");
+        else if (std::find(_value.begin() + _value.find('.') + 1, _value.end(), '.') != _value.end())
+            throw std::invalid_argument("Error: File.csv has invalid value format.");
+    }
+    for (std::size_t i = (_value[0] == '+' || _value[0] == '-') ? 1:0; i < _value.length(); i++)
+    {
+        if ((std::isdigit(_value[i]) == 0) && (_value[i] != '.'))
+            throw std::invalid_argument("Error: File.csv has invalid value format.");
+    }
+}
+
 void  BitcoinExchange::__init_var(void){
 
-    _year_range["min"] =  UINT_MAX;
+    _year_range["min"] =  INT_MAX;
     _year_range["max"] = 0;
 }
 
@@ -198,9 +238,9 @@ void BitcoinExchange::__find_year_range(std::map<std::string, int> &inst){
     for (iterator it = _exchangeData.begin(); it != _exchangeData.end(); it++){
 
         nYear = it->first / 10000;
-        if (inst["min"] > nYear)
+        if (nYear < inst["min"])
             inst["min"] = nYear;
-        if (inst["max"] < nYear)
+        if (nYear > inst["max"])
             inst["max"] = nYear;   
     }
 }

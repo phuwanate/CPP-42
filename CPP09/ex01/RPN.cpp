@@ -99,7 +99,7 @@ std::size_t RPN::__is_ops(std::string const& arg){
 
     for (std::size_t i = 0; i < 4; i++){
 
-        if (arg == ops[i])    
+        if (arg == ops[i])
             return i;
     }
     return -1;
